@@ -1,0 +1,533 @@
+@import "tailwindcss";
+
+/* Class-based dark mode: Tailwind 4 defaults to prefers-color-scheme. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------- tokens */
+/* Three brand colours come out of the Figma file as variables:
+     GREEN (Primary)        #00C853
+     Deep Navy Blue (Accent) #0A1931
+     Bright Yellow (Sec.)    #FFC400
+   Everything below is derived from those so a brand change is a three-line
+   edit. `.bs-theme-light` / `.bs-theme-dark` re-declare the same tokens on a
+   subtree, so a block can opt out of the page theme. */
+:root,
+.bs-theme-light {
+  --bs-bg: #ffffff;
+  --bs-bg2: #f2f7f4;
+  --bs-panel: #f8fbf9;
+  --bs-surface: #ffffff;
+  --bs-surface2: #f6faf7;
+  --bs-line: #e4ece7;
+  --bs-line2: #ccdcd2;
+  --bs-ink: #0a1931;
+  --bs-muted: #4c5a6c;
+
+  /* Two greens, split by job.
+     `--bs-primary-vivid` is #00C853 exactly as the design file defines it.
+     White on it measures 2.24:1, so it is used only where it carries no
+     text: glows, rules, the active-nav underline, accent dots.
+     `--bs-primary` is the green that *surfaces* use — tiles, the band, the
+     FAQ bars, buttons — and it clears 4.5:1 against white. */
+  --bs-primary-vivid: #00c853;
+  --bs-primary: #00843a;
+  /* One step below `--bs-primary`, for a selected row sitting *on* a green
+     surface — the dashboard rail's active item. 1.85:1 against the rail is
+     too little on its own, so the active item also carries bold weight and
+     `aria-current`; the colour is reinforcement, not the signal. */
+  --bs-primary-dark: #005624;
+  --bs-on-primary: #ffffff;
+  --bs-primary-soft: #e4faec;
+  /* Green words on a light background. Same value; named for the other job
+     so a future change to one does not silently move the other. */
+  --bs-primary-text: #00843a;
+
+  --bs-accent: #0a1931;
+  --bs-on-accent: #ffffff;
+  --bs-secondary: #ffc400;
+  --bs-on-secondary: #0a1931;
+
+  --bs-success: #047a3d;
+  --bs-success-soft: #e2f6ea;
+  --bs-warning: #8a5a05;
+  --bs-warning-soft: #fff3d6;
+  --bs-error: #c0282d;
+  --bs-error-soft: #fde8e8;
+
+  --bs-glow: rgb(0 200 83 / 0.14);
+  --bs-glow2: rgb(255 196 0 / 0.1);
+  --bs-scrim: rgb(10 25 49 / 0.5);
+
+  /* motion */
+  --bs-dur-exit: 150ms;
+  --bs-dur-enter: 210ms;
+  --bs-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.dark,
+.bs-theme-dark {
+  --bs-bg: #061021;
+  --bs-bg2: #0a1931;
+  --bs-panel: #08152a;
+  --bs-surface: #0d1f3c;
+  --bs-surface2: #12294b;
+  --bs-line: #1c3457;
+  --bs-line2: #2b4870;
+  --bs-ink: #eef4f1;
+  --bs-muted: #9fb1c4;
+
+  --bs-primary-vivid: #00c853;
+  --bs-primary: #00843a;
+  --bs-primary-dark: #005624;
+  --bs-on-primary: #ffffff;
+  --bs-primary-soft: #0d3320;
+  /* On the dark navy background the bright green is already past 7:1, so
+     green *text* can stay vivid here even though green surfaces cannot. */
+  --bs-primary-text: #3ce07c;
+
+  --bs-accent: #eef4f1;
+  --bs-on-accent: #0a1931;
+  --bs-secondary: #ffc400;
+  --bs-on-secondary: #0a1931;
+
+  --bs-success: #52d18c;
+  --bs-success-soft: #0f3220;
+  --bs-warning: #f2b54b;
+  --bs-warning-soft: #352a0f;
+  --bs-error: #ff8080;
+  --bs-error-soft: #3b1619;
+
+  --bs-glow: rgb(0 200 83 / 0.12);
+  --bs-glow2: rgb(255 196 0 / 0.06);
+  --bs-scrim: rgb(0 0 0 / 0.6);
+}
+
+/* ------------------------------------------------ brand-exact opt-out */
+/* The design paints white text straight onto #00C853, which lands at 2.24:1
+   — below the 4.5:1 WCAG AA needs for body copy, and below even the 3:1 for
+   large text. Accessible is therefore the default.
+   `data-bs-contrast="brand"` on <html> puts the literal #00C853 back on
+   text-bearing surfaces. It reproduces the Figma pixel for pixel and fails
+   WCAG AA; it exists for side-by-side review, not for shipping. */
+:root[data-bs-contrast="brand"] {
+  --bs-primary: var(--bs-primary-vivid);
+}
+
+/* --------------------------------------------- expose tokens to tailwind */
+@theme inline {
+  --color-bg: var(--bs-bg);
+  --color-bg2: var(--bs-bg2);
+  --color-panel: var(--bs-panel);
+  --color-surface: var(--bs-surface);
+  --color-surface2: var(--bs-surface2);
+  --color-line: var(--bs-line);
+  --color-line2: var(--bs-line2);
+  --color-ink: var(--bs-ink);
+  --color-muted: var(--bs-muted);
+
+  --color-primary: var(--bs-primary);
+  --color-primary-vivid: var(--bs-primary-vivid);
+  --color-primary-dark: var(--bs-primary-dark);
+  --color-on-primary: var(--bs-on-primary);
+  --color-primary-soft: var(--bs-primary-soft);
+  --color-primary-text: var(--bs-primary-text);
+
+  --color-accent: var(--bs-accent);
+  --color-on-accent: var(--bs-on-accent);
+  --color-secondary: var(--bs-secondary);
+  --color-on-secondary: var(--bs-on-secondary);
+
+  --color-success: var(--bs-success);
+  --color-success-soft: var(--bs-success-soft);
+  --color-warning: var(--bs-warning);
+  --color-warning-soft: var(--bs-warning-soft);
+  --color-error: var(--bs-error);
+  --color-error-soft: var(--bs-error-soft);
+
+  --font-display: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Radii lifted from the frames: 40px service tiles, 30px step and
+     testimonial cards, pill navigation and buttons. */
+  --radius-chip: 14px;
+  --radius-field: 16px;
+  --radius-card: 24px;
+  --radius-step: 30px;
+  --radius-tile: 40px;
+  --radius-hero: 74px;
+
+  --shadow-e1: var(--bs-e1);
+  --shadow-e2: var(--bs-e2);
+  --shadow-e3: var(--bs-e3);
+  --shadow-e4: var(--bs-e4);
+
+  --ease-bs: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ------------------------------------------------------------------ base */
+@layer base {
+  * {
+    border-color: var(--bs-line);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* offset anchor targets so the sticky header never covers a heading */
+    scroll-padding-top: 7rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--bs-bg);
+    color: var(--bs-ink);
+    font-family: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--bs-primary-text);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  /* tabular figures for every money/number element */
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    background: var(--bs-primary-soft);
+    color: var(--bs-primary-text);
+  }
+}
+
+/* ------------------------------------------------------------ utilities */
+
+/* The 1424px content column from the Figma frames, inside a 1728px artboard. */
+@utility bs-wrap {
+  width: 100%;
+  max-width: 89rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (width >= 48rem) {
+    padding-inline: 2.5rem;
+  }
+  @media (width >= 80rem) {
+    padding-inline: 3.5rem;
+  }
+}
+
+/* Hero h1 — 40px/58px in the file, fluid down to 30px on a phone. Capped at
+   the frame's 40px so "All your Bills, One Blink" still sets on one line in
+   the 29rem column rather than spilling to a third. */
+@utility bs-h1 {
+  font-size: clamp(1.875rem, 1.35rem + 1.8vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.22;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+/* Section headings — 40–45px in the file. */
+@utility bs-h2 {
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.16;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+@utility bs-lead {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+  @media (width >= 40rem) {
+    font-size: 1.0625rem;
+  }
+}
+
+/* ================================================================
+   CARD + ELEVATION SYSTEM
+   ----------------------------------------------------------------
+   The Figma file uses one flat `0 4px 4px rgba(0,0,0,.25)` on every
+   card, which reads as a sticker rather than a surface. Each level
+   here is a tight contact shadow plus a wide soft cast, which is what
+   makes a card look like it is sitting on the page.
+   ================================================================ */
+:root,
+.bs-theme-light {
+  --bs-e1: 0 1px 2px rgb(10 25 49 / 0.05), 0 2px 6px -1px rgb(10 25 49 / 0.06);
+  --bs-e2: 0 1px 2px rgb(10 25 49 / 0.05), 0 10px 24px -8px rgb(10 25 49 / 0.14);
+  --bs-e3: 0 1px 2px rgb(10 25 49 / 0.06), 0 26px 60px -22px rgb(10 25 49 / 0.3);
+  --bs-e4: 0 2px 4px rgb(10 25 49 / 0.06), 0 52px 100px -34px rgb(10 25 49 / 0.4);
+
+  --bs-spec: inset 0 1px 0 rgb(255 255 255 / 0.85);
+  --bs-ring: inset 0 0 0 1px rgb(10 25 49 / 0.07);
+
+  --bs-card-fill: linear-gradient(177deg, var(--bs-surface) 0%, var(--bs-surface2) 100%);
+
+  /* Gradient hairline: bright at the top, fading to nothing at the base. */
+  --bs-edge: linear-gradient(
+    180deg,
+    rgb(255 255 255 / 0.95) 0%,
+    rgb(255 255 255 / 0.25) 38%,
+    color-mix(in srgb, var(--bs-line2) 45%, transparent) 100%
+  );
+
+  --bs-glass-fill: color-mix(in srgb, var(--bs-surface) 72%, transparent);
+  --bs-glass-line: color-mix(in srgb, var(--bs-line2) 60%, transparent);
+  --bs-glass-blur: 18px;
+}
+
+.dark,
+.bs-theme-dark {
+  --bs-e1: 0 1px 2px rgb(0 0 0 / 0.4), 0 2px 6px -1px rgb(0 0 0 / 0.3);
+  --bs-e2: 0 1px 2px rgb(0 0 0 / 0.45), 0 10px 24px -8px rgb(0 0 0 / 0.5);
+  --bs-e3: 0 1px 3px rgb(0 0 0 / 0.5), 0 26px 60px -22px rgb(0 0 0 / 0.7);
+  --bs-e4: 0 2px 6px rgb(0 0 0 / 0.55), 0 52px 100px -34px rgb(0 0 0 / 0.8);
+
+  --bs-spec: inset 0 1px 0 rgb(255 255 255 / 0.1);
+  --bs-ring: inset 0 0 0 1px rgb(255 255 255 / 0.07);
+
+  --bs-card-fill: linear-gradient(
+    177deg,
+    color-mix(in srgb, var(--bs-surface) 94%, white) 0%,
+    var(--bs-surface) 100%
+  );
+
+  --bs-edge: linear-gradient(
+    180deg,
+    rgb(255 255 255 / 0.22) 0%,
+    rgb(255 255 255 / 0.07) 42%,
+    rgb(255 255 255 / 0.02) 100%
+  );
+
+  --bs-glass-fill: color-mix(in srgb, var(--bs-surface) 55%, transparent);
+  --bs-glass-line: rgb(255 255 255 / 0.1);
+  --bs-glass-blur: 22px;
+}
+
+/* ---------------------------------------------------------------- cards */
+
+@utility bs-card {
+  position: relative;
+  background: var(--bs-card-fill);
+  box-shadow: var(--bs-spec), var(--bs-ring), var(--bs-e2);
+}
+
+@utility bs-glass {
+  position: relative;
+  background: var(--bs-glass-fill);
+  box-shadow: var(--bs-spec), inset 0 0 0 1px var(--bs-glass-line), var(--bs-e2);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .bs-glass {
+    -webkit-backdrop-filter: blur(var(--bs-glass-blur)) saturate(150%);
+    backdrop-filter: blur(var(--bs-glass-blur)) saturate(150%);
+  }
+}
+
+/* The green service tile. A 4% vertical gradient plus a top-edge specular
+   keeps it from reading as a flat swatch, without shifting the hue. */
+@utility bs-tile {
+  position: relative;
+  background: linear-gradient(
+    168deg,
+    var(--bs-primary) 0%,
+    color-mix(in srgb, var(--bs-primary) 88%, var(--bs-accent)) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.28),
+    0 10px 24px -10px color-mix(in srgb, var(--bs-primary) 60%, transparent),
+    var(--bs-e2);
+}
+
+/* Lift on hover. Separate from the card so static cards cost no transition,
+   and keyboard users get the same affordance through :focus-within. */
+@utility bs-lift {
+  transition:
+    box-shadow 0.3s var(--bs-ease),
+    translate 0.3s var(--bs-ease);
+}
+
+.bs-lift:hover,
+.bs-lift:focus-within {
+  translate: 0 -3px;
+  box-shadow: var(--bs-spec), var(--bs-ring), var(--bs-e3);
+}
+
+.bs-tile.bs-lift:hover,
+.bs-tile.bs-lift:focus-within {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.28),
+    0 18px 40px -14px color-mix(in srgb, var(--bs-primary) 70%, transparent),
+    var(--bs-e3);
+}
+
+/* Masked gradient ring. `exclude` punches out the middle so only a 1px frame
+   of the gradient survives, following `border-radius: inherit`. */
+@utility bs-edge {
+  position: relative;
+}
+
+.bs-edge::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: var(--bs-edge);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Card content sits above the ring pseudo-element. */
+@utility bs-raise {
+  position: relative;
+  z-index: 1;
+}
+
+/* ------------------------------------------------------------ sections */
+
+/* Soft colour wash behind a band, so the glass cards have something to
+   sample and the page is not one long run of identical white slabs. */
+@utility bs-wash {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(55% 45% at 10% 0%, var(--bs-glow) 0%, transparent 70%),
+    radial-gradient(45% 45% at 92% 100%, var(--bs-glow2) 0%, transparent 70%);
+}
+
+@utility bs-band {
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    color-mix(in srgb, var(--bs-bg2) 75%, transparent) 14%,
+    color-mix(in srgb, var(--bs-bg2) 75%, transparent) 86%,
+    transparent 100%
+  );
+}
+
+/* Hairline divider that fades at both ends rather than running wall to wall. */
+@utility bs-rule {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--bs-line2) 20%,
+    var(--bs-line2) 80%,
+    transparent
+  );
+}
+
+/* -------------------------------------------------------------- motion */
+
+@keyframes bs-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes bs-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+/* Scroll-reveal. Only hides when JS is running (the `js` class is set before
+   first paint), so without JS every section renders plainly visible. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .bs-reveal[data-reveal="hidden"] {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  .js .bs-reveal[data-reveal="shown"] {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s var(--bs-ease);
+    transition-delay: var(--bs-delay, 0ms);
+  }
+}
+
+/* The marquee track is duplicated in the markup, so -50% is exactly one
+   copy and the loop is seamless. It idles while off screen. */
+.bs-marquee-track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .bs-marquee-track[data-play="on"] {
+    animation: bs-marquee var(--bs-marquee-dur, 46s) linear infinite;
+  }
+  .bs-marquee:hover .bs-marquee-track,
+  .bs-marquee:focus-within .bs-marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+/* Edge fade so logos enter and leave the strip instead of being clipped. */
+@utility bs-fade-x {
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 7%,
+    #000 93%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 7%,
+    #000 93%,
+    transparent
+  );
+}
+
+/* ------------------------------------------------------- reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
