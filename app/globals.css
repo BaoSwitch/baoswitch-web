@@ -23,14 +23,10 @@
   --bs-ink: #0a1931;
   --bs-muted: #4c5a6c;
 
-  /* Two greens, split by job.
-     `--bs-primary-vivid` is #00C853 exactly as the design file defines it.
-     White on it measures 2.24:1, so it is used only where it carries no
-     text: glows, rules, the active-nav underline, accent dots.
-     `--bs-primary` is the green that *surfaces* use — tiles, the band, the
-     FAQ bars, buttons — and it clears 4.5:1 against white. */
+  /* Primary surfaces use the exact brand green. Keep text green separate so
+     text on light surfaces can retain a readable contrast ratio. */
   --bs-primary-vivid: #00c853;
-  --bs-primary: #00843a;
+  --bs-primary: #00c853;
   /* One step below `--bs-primary`, for a selected row sitting *on* a green
      surface — the dashboard rail's active item. 1.85:1 against the rail is
      too little on its own, so the active item also carries bold weight and
@@ -77,7 +73,7 @@
   --bs-muted: #9fb1c4;
 
   --bs-primary-vivid: #00c853;
-  --bs-primary: #00843a;
+  --bs-primary: #00c853;
   --bs-primary-dark: #005624;
   --bs-on-primary: #ffffff;
   --bs-primary-soft: #0d3320;
@@ -100,17 +96,6 @@
   --bs-glow: rgb(0 200 83 / 0.12);
   --bs-glow2: rgb(255 196 0 / 0.06);
   --bs-scrim: rgb(0 0 0 / 0.6);
-}
-
-/* ------------------------------------------------ brand-exact opt-out */
-/* The design paints white text straight onto #00C853, which lands at 2.24:1
-   — below the 4.5:1 WCAG AA needs for body copy, and below even the 3:1 for
-   large text. Accessible is therefore the default.
-   `data-bs-contrast="brand"` on <html> puts the literal #00C853 back on
-   text-bearing surfaces. It reproduces the Figma pixel for pixel and fails
-   WCAG AA; it exists for side-by-side review, not for shipping. */
-:root[data-bs-contrast="brand"] {
-  --bs-primary: var(--bs-primary-vivid);
 }
 
 /* --------------------------------------------- expose tokens to tailwind */

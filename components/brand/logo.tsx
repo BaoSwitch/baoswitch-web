@@ -42,7 +42,7 @@ export function Logo({
         <span
           className={cn(
             "font-display text-[1em] leading-none font-extrabold tracking-[-0.01em]",
-            light ? "text-white" : "text-primary-text",
+            light ? "text-white" : "text-primary",
           )}
         >
           AOSWITCH

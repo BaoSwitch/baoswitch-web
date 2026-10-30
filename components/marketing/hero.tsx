@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ButtonLink } from "@/components/ui/button";
 import { DesignIcon } from "@/components/ui/design-icon";
 import { Reveal } from "@/components/motion/reveal";
+import { HeroPortrait } from "@/components/marketing/hero-portrait";
 import { HERO_CHIPS } from "@/lib/content";
 
 /**
@@ -80,16 +81,7 @@ export function Hero() {
                   `object-cover` cannot express it, because the design zooms
                   ~1.27x past cover and is off-centre. */}
               <div className="relative aspect-[506/608] overflow-hidden rounded-tr-[var(--radius-hero)] rounded-bl-[var(--radius-hero)]">
-                <Image
-                  src="/assets/photos/hero-portrait.png"
-                  alt="A BAOSWITCH customer paying a bill on her phone"
-                  width={2000}
-                  height={1333}
-                  priority
-                  sizes="(max-width: 1024px) 190vw, 76vw"
-                  className="absolute max-w-none"
-                  style={{ width: "228.06%", left: "-57.44%", top: "0.3%", height: "auto" }}
-                />
+                <HeroPortrait />
               </div>
             </div>
 

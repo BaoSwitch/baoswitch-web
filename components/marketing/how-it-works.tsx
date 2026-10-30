@@ -38,7 +38,7 @@ export function HowItWorks() {
                 aria-hidden
                 width={80}
                 height={80}
-                className="absolute top-0 left-1/2 size-20 -translate-x-1/2 drop-shadow-[0_6px_12px_rgb(0_0_0/0.25)]"
+                className="absolute top-0 left-1/2 z-10 size-20 -translate-x-1/2 drop-shadow-[0_6px_12px_rgb(0_0_0/0.25)]"
               />
               <div className="flex h-full flex-col items-center gap-5 rounded-[var(--radius-step)] border-2 border-white/70 bg-white/5 px-6 pt-12 pb-9 text-center backdrop-blur-[2px]">
                 <DesignIcon art={step.icon} className="size-16" />
