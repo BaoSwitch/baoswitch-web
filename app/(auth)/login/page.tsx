@@ -5,6 +5,8 @@ import { AuthShell } from "@/components/auth/auth-shell";
 import { Button } from "@/components/ui/button";
 import { Field, PasswordField } from "@/components/ui/field";
 import { PROVIDERS } from "@/lib/content";
+import { Notice } from "@/components/app/ui";
+import { authMessage } from "@/lib/auth-errors";
 
 export const metadata: Metadata = {
   title: "Sign in",
@@ -15,7 +17,12 @@ export const metadata: Metadata = {
  *  at the frame's ~45px height. */
 const STRIP = ["GOtv", "MTN", "Glo", "9mobile", "Airtel", "BAO 360 Laundry"];
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ e?: string }>;
+}) {
+  const error = authMessage((await searchParams).e);
   const strip = STRIP.map((name) => PROVIDERS.find((p) => p.name === name)!).filter(Boolean);
 
   return (
@@ -63,13 +70,15 @@ export default function LoginPage() {
         </header>
 
         <form className="flex flex-col gap-7" action="/api/auth/login" method="post">
+          {error ? <Notice tone="error">{error}</Notice> : null}
           <Field
-            label="Email or username"
-            name="identifier"
-            type="text"
+            label="Phone number"
+            name="phone"
+            type="tel"
+            inputMode="tel"
             autoComplete="username"
             required
-            placeholder="Enter your mail or username"
+            placeholder="08031234567"
           />
           <PasswordField
             label="Password"

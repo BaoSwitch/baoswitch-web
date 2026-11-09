@@ -3,6 +3,8 @@ import Link from "next/link";
 import { AuthShell, BrandCheck } from "@/components/auth/auth-shell";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { Checkbox, Field, PasswordField } from "@/components/ui/field";
+import { Notice } from "@/components/app/ui";
+import { authMessage } from "@/lib/auth-errors";
 import { DesignIcon } from "@/components/ui/design-icon";
 import type { IconArt } from "@/components/ui/design-icon";
 
@@ -20,7 +22,12 @@ const SYMBOLS: IconArt[] = [
   { src: "/assets/icons/sym-tv.svg", w: 26, h: 26, slot: 26 },
 ];
 
-export default function SignupPage() {
+export default async function SignupPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ e?: string }>;
+}) {
+  const error = authMessage((await searchParams).e);
   return (
     <AuthShell
       photo="/assets/photos/auth-signup.png"
@@ -72,6 +79,8 @@ export default function SignupPage() {
             </p>
           </div>
 
+          {error ? <Notice tone="error">{error}</Notice> : null}
+
           <div className="bs-raise flex flex-col gap-4">
             <Field
               label="Full name"
@@ -94,7 +103,7 @@ export default function SignupPage() {
               type="tel"
               autoComplete="tel"
               required
-              placeholder="+234 803 000 4421"
+              placeholder="08030004421"
             />
             <div className="grid gap-4 sm:grid-cols-2">
               <PasswordField

@@ -34,6 +34,25 @@ the electricity token as four separate screens. They are one screen in four
 states, so `transactions/[reference]` renders whichever state a reference is
 in. A link saved while a payment was pending still resolves after it settles.
 
+## Connecting to the API
+
+The browser never calls the Go API. Forms post to `/api/auth/*` and data is
+read through `/api/v1/*`; both run on this server, keep the access and refresh
+tokens in httpOnly cookies, and refresh the access token once on a 401.
+
+| Variable | What for |
+| --- | --- |
+| `API_URL` | The Go API's address, server-side only (default `http://localhost:8080`). |
+| `SESSION_SECRET` | Seals the pending sign-up cookie. Required in production. |
+
+Wired so far: sign-up, sign-in (including the new-device code), sign-out, the
+`/app` route guard, and live wallet balance and dedicated account. The rest of
+the dashboard still shows demo data from `lib/app-data.ts`.
+
+Local run: start the API (`make up && make migrate && make run` in
+baoswitch-api), then `npm run dev`. With the fake email driver, read sign-up
+codes from `GET http://localhost:8080/dev/otp/<email>`.
+
 ## Layout
 
 ```
