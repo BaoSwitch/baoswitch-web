@@ -6,26 +6,38 @@ import { AuthBrand, AuthCard, AuthFootnote } from "@/components/auth/auth-card";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Notice } from "@/components/app/ui";
-import { USER } from "@/lib/app-data";
+import { authMessage } from "@/lib/auth-errors";
+import { getPending } from "@/lib/server/session";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = { title: "Verify contact" };
 
-export default function VerifyContactPage() {
+export default async function VerifyContactPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ e?: string }>;
+}) {
+  const pending = await getPending();
+  if (!pending) redirect("/login?e=NO_PENDING");
+  const error = authMessage((await searchParams).e);
+  const where = pending.sent_to ?? "your email";
+  const back = pending.kind === "signup" ? "/signup" : "/login";
   return (
-    <AuthShell photo="/assets/photos/auth-signup.png" photoOpacity={0.3} brand={<AuthBrand />} backHref="/signup">
+    <AuthShell photo="/assets/photos/auth-signup.png" photoOpacity={0.3} brand={<AuthBrand />} backHref={back}>
       <div className="flex flex-col gap-8">
         <AuthCard
           eyebrow="ACCOUNT ACCESS · VERIFY CONTACT"
           title="Check your messages"
-          lead={`Enter the six-digit code sent to ${USER.phone}.`}
+          lead={`Enter the six-digit code sent to ${where}.`}
         >
           <p className="bs-raise">
             <span className="inline-flex items-center rounded-full bg-primary px-3 py-1 text-[13px] font-medium text-white">
-              Phone verification
+              {pending.kind === "signup" ? "Email verification" : "New device check"}
             </span>
           </p>
 
           <form className="bs-raise flex flex-col gap-5" action="/api/auth/verify" method="post">
+            {error ? <Notice tone="error">{error}</Notice> : null}
             {/* `one-time-code` lets a phone offer the SMS code straight from
                 the keyboard, and the numeric mode avoids a letter keypad. */}
             <Field
@@ -43,8 +55,8 @@ export default function VerifyContactPage() {
               <Button type="submit" size="md">
                 Verify contact
               </Button>
-              <ButtonLink href="/signup" variant="ghost" size="md" className="border-line2">
-                Back to account setup
+              <ButtonLink href={back} variant="ghost" size="md" className="border-line2">
+                {pending.kind === "signup" ? "Back to account setup" : "Back to sign in"}
               </ButtonLink>
             </div>
           </form>
@@ -52,10 +64,10 @@ export default function VerifyContactPage() {
           <hr className="bs-raise bs-rule" />
 
           <Link
-            href="/signup"
+            href={back}
             className="bs-raise inline-flex items-center gap-1 text-[15px] font-semibold text-primary-text underline-offset-4 hover:underline"
           >
-            Wrong number? Change contact
+            {pending.kind === "signup" ? "Wrong email? Change contact" : "Use a different account"}
             <ArrowRight aria-hidden className="size-4" />
           </Link>
 

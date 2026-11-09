@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Copy, Eye, EyeOff, Plus, Wallet } from "lucide-react";
-import { WALLET, money } from "@/lib/app-data";
+import { naira, useApi, type DedicatedAccount, type Wallet as WalletData } from "@/lib/use-api";
 
 /**
  * The wallet hero on the Overview screen.
@@ -17,10 +17,13 @@ import { WALLET, money } from "@/lib/app-data";
 export function WalletCard() {
   const [shown, setShown] = useState(true);
   const [copied, setCopied] = useState(false);
+  const wallet = useApi<WalletData>("/wallet");
+  const account = useApi<DedicatedAccount>("/wallet/account");
+  const active = account.data?.status === "ACTIVE" ? account.data : null;
 
   async function copy() {
     try {
-      await navigator.clipboard.writeText(WALLET.accountNumber);
+      if (active?.account_number) await navigator.clipboard.writeText(active.account_number);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -49,7 +52,7 @@ export function WalletCard() {
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-4">
         <p className="text-[clamp(2rem,1.5rem+1.8vw,2.75rem)] leading-none font-semibold">
-          {shown ? money(WALLET.available) : "₦ ••••••"}
+          {!shown || !wallet.data ? "₦ ••••••" : naira(wallet.data.available_kobo)}
         </p>
         <Link
           href="/app/wallet/fund"
@@ -69,8 +72,9 @@ export function WalletCard() {
           </dt>
           <dd className="mt-1 flex items-center gap-2 text-[15px] font-medium">
             <span className="num">
-              {WALLET.bank} · {WALLET.accountNumber}
+              {active ? `${active.bank_name} · ${active.account_number}` : "Not set up yet"}
             </span>
+            {active ? (
             <button
               type="button"
               onClick={copy}
@@ -79,6 +83,7 @@ export function WalletCard() {
               <Copy aria-hidden className="size-4" />
               <span className="sr-only">Copy account number</span>
             </button>
+            ) : null}
             <span aria-live="polite" className="text-[12px] text-white/90">
               {copied ? "Copied" : ""}
             </span>
@@ -86,14 +91,20 @@ export function WalletCard() {
         </div>
         <div>
           <dt className="text-[12px] tracking-wide text-white/80 uppercase">Account name</dt>
-          <dd className="mt-1 text-[15px] font-medium">{WALLET.accountName}</dd>
+          <dd className="mt-1 text-[15px] font-medium">{active?.account_name ?? "—"}</dd>
         </div>
       </dl>
 
-      <p className="mt-4 text-[12px] text-white/80">
-        {money(WALLET.held)} is held for a pending {WALLET.heldFor} payment and is already excluded
-        from the balance above.
-      </p>
+      {wallet.error ? (
+        <p role="alert" className="mt-4 text-[12px] text-white">
+          We couldn&rsquo;t load your balance. Refresh to try again.
+        </p>
+      ) : wallet.data && wallet.data.held_kobo + wallet.data.frozen_kobo > 0 ? (
+        <p className="mt-4 text-[12px] text-white/80">
+          {naira(wallet.data.held_kobo + wallet.data.frozen_kobo)} is held for payments in progress
+          and is already excluded from the balance above.
+        </p>
+      ) : null}
     </section>
   );
 }

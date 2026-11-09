@@ -141,13 +141,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Settings className="size-[18px]" strokeWidth={1.8} />
             Account settings
           </Link>
-          <Link
-            href="/login"
-            className="flex items-center gap-3 rounded-[var(--radius-chip)] px-4 py-2.5 text-[15px] text-white/90 transition-colors hover:bg-white/15 hover:text-white"
-          >
-            <LogOut className="size-[18px]" strokeWidth={1.8} />
-            Sign out
-          </Link>
+          <form action="/api/auth/logout" method="post">
+            <button
+              type="submit"
+              className="flex w-full items-center gap-3 rounded-[var(--radius-chip)] px-4 py-2.5 text-left text-[15px] text-white/90 transition-colors hover:bg-white/15 hover:text-white"
+            >
+              <LogOut className="size-[18px]" strokeWidth={1.8} />
+              Sign out
+            </button>
+          </form>
           <hr className="mx-4 my-3 border-0 border-t border-white/25" />
           <p className="px-4 text-[11px] text-white/80">© 2026 BAOSWITCH Technologies</p>
         </div>
