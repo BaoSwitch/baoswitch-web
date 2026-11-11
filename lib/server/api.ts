@@ -59,8 +59,23 @@ export async function api<T = unknown>(path: string, opts: Opts = {}): Promise<A
       headers,
       body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
       cache: "no-store",
+      // Never follow a redirect. fetch drops the Authorization header when a
+      // redirect changes origin (http -> https counts), so a misconfigured
+      // API_URL used to look like an expired session and sign people out.
+      redirect: "manual",
       signal: opts.signal ?? AbortSignal.timeout(35_000),
     });
+    if (res.status >= 300 && res.status < 400) {
+      console.error(
+        `API_URL redirects (${res.status} to ${res.headers.get("location") ?? "?"}). ` +
+          "Set API_URL to the final https:// address of the API.",
+      );
+      return {
+        ok: false,
+        status: 502,
+        data: { code: "BAD_GATEWAY", message: "We couldn't reach the server. Try again shortly." } as T,
+      };
+    }
     const text = await res.text();
     let data: unknown = undefined;
     if (text) {
