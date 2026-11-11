@@ -44,4 +44,11 @@ jobs:
     steps:
       # Dokploy app > Deployments > Webhook URL, stored as a repo secret.
       - name: Trigger Dokploy redeploy
-        run: curl -fsS -X POST "${{ secrets.DOKPLOY_DEPLOY_HOOK }}"
+        env:
+          HOOK: ${{ secrets.DOKPLOY_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "::warning::DOKPLOY_DEPLOY_HOOK is not set (Settings > Secrets and variables > Actions > Repository secrets). Skipping auto-redeploy; deploy from Dokploy by hand."
+            exit 0
+          fi
+          curl -fsS -X POST "$HOOK"
