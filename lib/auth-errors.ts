@@ -13,6 +13,7 @@ const MESSAGES: Record<string, string> = {
   TERMS_REQUIRED: "Please accept the terms to continue.",
   NO_PENDING: "Your session expired. Please start again.",
   SERVICE_UNREACHABLE: "We couldn't reach the server. Try again shortly.",
+  BAD_GATEWAY: "We couldn't reach the server. Try again shortly.",
   SESSION_EXPIRED: "Your session ended. Please sign in again.",
 };
 
