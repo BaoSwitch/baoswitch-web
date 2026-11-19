@@ -18,8 +18,7 @@ npm run lint
 **Account access** — `/login` · `/signup` · `/verify` · `/forgot-password` · `/reset-password` · `/set-pin`
 **Customer dashboard** — `/app` and below: `wallet`, `wallet/fund`, `wallet/status`, `pay` + six
 purchase forms, `pay/review`, `transactions`, `transactions/[reference]`, `beneficiaries`,
-`beneficiaries/[id]`, `beneficiaries/new`, `services/architects`, `services/architects/[id]`,
-`services/architects/requests`, `services/laundry`, `services/laundry/booking`, `support`,
+`beneficiaries/[id]`, `beneficiaries/new`, `support`,
 `support/report`, `support/tickets/[id]`, `settings`, `settings/security`,
 `settings/notifications`, `settings/identity`
 **Admin** — `/admin`

@@ -14,22 +14,8 @@ export type Service = {
   blurb: string;
   /** Glyph exported from Figma. */
   icon?: IconArt;
-  /**
-   * Fallback glyph for a service the frame never drew an icon for. Laundry
-   * was represented by the BAO 360 wordmark crammed into the tile, which is
-   * a logo doing an icon's job — illegible at icon size and silent about
-   * what the service is.
-   */
-  lucide?: "shirt";
   href: string;
-  /**
-   * `bills` is the core product — things you top up or settle.
-   * `group` is the rest of BAO Group: a booking and a commission, not a
-   * bill. The frame gives all eight the same green tile, which tells a
-   * first-time visitor that hiring an architect and buying ₦100 of airtime
-   * are the same kind of action. They are not, so they are split.
-   */
-  kind: "bills" | "group";
+  kind: "bills";
 };
 
 export const SERVICES: Service[] = [
@@ -80,22 +66,6 @@ export const SERVICES: Service[] = [
     blurb: "Reach customers instantly",
     icon: { src: "/assets/icons/svc-bulk-sms.svg", w: 68.6667, h: 63.5641, slot: 80 },
     href: "/services/bulk-sms",
-  },
-  {
-    slug: "laundry",
-    kind: "group",
-    title: "BAO 360 Laundry",
-    blurb: "Premium laundry service, offering fast, reliable, and hassle-free garment care",
-    lucide: "shirt",
-    href: "/services/laundry",
-  },
-  {
-    slug: "architect",
-    kind: "group",
-    title: "Hire an Architect",
-    blurb: "Get the best of architectural designs & real estate services",
-    icon: { src: "/assets/icons/svc-architect.svg", w: 80, h: 80, slot: 80 },
-    href: "/services/architect",
   },
 ];
 
@@ -207,7 +177,6 @@ export type Provider = {
 
 /** The supported-provider strip, in the order the frame lists them. */
 export const PROVIDERS: Provider[] = [
-  { name: "BAO 360 Laundry", src: "/assets/logos/bao360.png", w: 280, h: 98, tint: true },
   { name: "MTN", src: "/assets/logos/mtn.png", w: 126, h: 118 },
   { name: "Glo", src: "/assets/logos/glo.png", w: 156, h: 160 },
   { name: "9mobile", src: "/assets/logos/9mobile.png", w: 106, h: 129 },
@@ -228,7 +197,7 @@ export const FAQS = [
   },
   {
     q: "What services can I pay for on BAOSWITCH?",
-    a: "Airtime and data for every supported network, electricity bills, cable TV subscriptions, WAEC, NECO and NABTEB result checker pins, and bulk SMS. BAO 360 Laundry and architectural consultations are booked from the same wallet.",
+    a: "Airtime and data for every supported network, electricity bills, cable TV subscriptions, WAEC, NECO and NABTEB result checker pins, and bulk SMS.",
   },
   {
     q: "How do I get started with BAOSWITCH?",

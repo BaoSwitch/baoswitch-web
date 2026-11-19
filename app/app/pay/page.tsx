@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, ChevronRight, HardHat, Shirt, ArrowLeftRight } from "lucide-react";
+import { ArrowRight, ChevronRight, ArrowLeftRight } from "lucide-react";
 import { PageHeader, Panel, SplitBody, ServiceIcon, RailLink } from "@/components/app/ui";
 import { WalletRail } from "@/components/app/wallet-rail";
 import { BENEFICIARIES, PAY_SERVICES } from "@/lib/app-data";
@@ -85,37 +85,6 @@ export default function PayBillsPage() {
             </li>
           ))}
         </ul>
-
-        <Panel title="More from BAOSWITCH">
-          <ul className="grid gap-5 sm:grid-cols-2">
-            <li>
-              <Link
-                href="/app/services/laundry"
-                className="group flex h-full flex-col gap-2 rounded-[var(--radius-field)] border border-line p-5 transition-colors hover:border-line2"
-              >
-                <Shirt aria-hidden className="size-6 text-primary-text" strokeWidth={1.7} />
-                <span className="font-semibold text-primary-text">Premium Laundry · BAO 360</span>
-                <span className="mt-auto inline-flex items-center gap-1 pt-2 text-[13px] font-semibold text-primary-text">
-                  Book laundry
-                  <ArrowRight aria-hidden className="size-3.5 transition-transform group-hover:translate-x-0.5" />
-                </span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/app/services/architects"
-                className="group flex h-full flex-col gap-2 rounded-[var(--radius-field)] border border-line p-5 transition-colors hover:border-line2"
-              >
-                <HardHat aria-hidden className="size-6 text-primary-text" strokeWidth={1.7} />
-                <span className="font-semibold text-primary-text">Hire an Architect</span>
-                <span className="mt-auto inline-flex items-center gap-1 pt-2 text-[13px] font-semibold text-primary-text">
-                  Find an expert
-                  <ArrowRight aria-hidden className="size-3.5 transition-transform group-hover:translate-x-0.5" />
-                </span>
-              </Link>
-            </li>
-          </ul>
-        </Panel>
       </SplitBody>
     </>
   );

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, BadgeCheck, Copy, HardHat, LifeBuoy, Shirt } from "lucide-react";
+import { ArrowUpRight, BadgeCheck, Copy, LifeBuoy } from "lucide-react";
 import { WalletCard } from "@/components/app/wallet-card";
 import { RecentTransactions } from "@/components/app/recent-transactions";
 import { ServiceIcon } from "@/components/app/ui";
@@ -80,37 +80,7 @@ export default function DashboardPage() {
 
       <RecentTransactions />
 
-      <ul className="grid gap-5 lg:grid-cols-3">
-        <li>
-          <Link
-            href="/app/services/laundry"
-            className="bs-card bs-edge bs-lift group flex h-full flex-col gap-2 rounded-[var(--radius-card)] p-6"
-          >
-            <span className="bs-raise flex items-start justify-between">
-              <Shirt aria-hidden className="size-6 text-primary-text" strokeWidth={1.7} />
-              <ArrowUpRight aria-hidden className="size-4 text-muted group-hover:text-primary-text" />
-            </span>
-            <span className="bs-raise mt-1 font-semibold text-ink">Premium Laundry</span>
-            <span className="bs-raise text-[13px] leading-relaxed text-muted">
-              Fresh clothes, less hassle. Discover premium garment care with BAO 360.
-            </span>
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/app/services/architects"
-            className="bs-card bs-edge bs-lift group flex h-full flex-col gap-2 rounded-[var(--radius-card)] p-6"
-          >
-            <span className="bs-raise flex items-start justify-between">
-              <HardHat aria-hidden className="size-6 text-primary-text" strokeWidth={1.7} />
-              <ArrowUpRight aria-hidden className="size-4 text-muted group-hover:text-primary-text" />
-            </span>
-            <span className="bs-raise mt-1 font-semibold text-ink">Hire an Architect</span>
-            <span className="bs-raise text-[13px] leading-relaxed text-muted">
-              Bring your next space to life with architectural design and real estate services.
-            </span>
-          </Link>
-        </li>
+      <ul className="grid gap-5">
         <li>
           <Link
             href="/app/support"

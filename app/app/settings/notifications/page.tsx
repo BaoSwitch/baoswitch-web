@@ -130,8 +130,8 @@ export default function NotificationsPage() {
               <Toggle
                 name="bookings"
                 defaultChecked
-                label="Booking request updates"
-                detail="Architecture and BAO 360 progress."
+                label="Order updates"
+                detail="Progress on your purchases."
               />
             </Panel>
 

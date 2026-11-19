@@ -50,22 +50,6 @@ export const CABLE_PRICES: CableRow[] = [
   { provider: "StarTimes", plan: "Super", price: 8000 },
 ];
 
-export type ArchitectureRow = { category: string; description: string; from: number };
-
-export const ARCHITECTURE_PRICES: ArchitectureRow[] = [
-  { category: "2D floor plan", description: "Basic residential floor-plan layout", from: 50000 },
-  { category: "3D exterior design", description: "Three-dimensional exterior visualization", from: 80000 },
-  { category: "3D interior design", description: "Interior visualization for a room or defined space", from: 60000 },
-  { category: "One-bedroom apartment design", description: "Conceptual design package", from: 150000 },
-  { category: "Two-bedroom apartment design", description: "Conceptual design package", from: 250000 },
-  { category: "Three-bedroom bungalow", description: "Residential design package", from: 350000 },
-  { category: "Duplex design", description: "Multi-level residential concept design", from: 600000 },
-  { category: "Commercial building design", description: "Office, retail, or other commercial concept", from: 800000 },
-  { category: "Site plan design", description: "Site layout and development planning", from: 100000 },
-  { category: "Renovation design", description: "Design for modifying an existing property", from: 120000 },
-  { category: "Architectural consultation", description: "Initial consultation with a professional", from: 25000 },
-];
-
 const naira = new Intl.NumberFormat("en-NG", {
   style: "currency",
   currency: "NGN",

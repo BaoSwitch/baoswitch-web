@@ -31,10 +31,6 @@ const FAQS = [
     q: "How do I retrieve an exam checker PIN?",
     a: "After success, open the transaction’s secure output area. PINs and serials are never included in notification previews.",
   },
-  {
-    q: "Is my architecture or laundry time booked?",
-    a: "A submitted request is not a confirmed booking. Check the request details for its current state.",
-  },
 ];
 
 export default function HelpCentrePage() {

@@ -5,7 +5,6 @@ import { ButtonLink } from "@/components/ui/button";
 import { Reveal } from "@/components/motion/reveal";
 import {
   AIRTIME_PRICES,
-  ARCHITECTURE_PRICES,
   CABLE_PRICES,
   formatNaira,
 } from "@/lib/pricing";
@@ -13,7 +12,7 @@ import {
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Airtime, cable TV and architectural service prices on BAOSWITCH. No service charge on airtime.",
+    "Airtime, data and cable TV prices on BAOSWITCH. No service charge on airtime.",
 };
 
 export default function PricingPage() {
@@ -60,26 +59,6 @@ export default function PricingPage() {
                 provider: r.provider,
                 plan: r.plan,
                 price: formatNaira(r.price),
-              }))}
-            />
-          </Reveal>
-        </div>
-      </Band>
-
-      <Band className="py-10 lg:py-16">
-        <div className="bs-wrap flex flex-col gap-8">
-          <Reveal>
-            <PriceTable
-              caption="Architectural & real estate services"
-              columns={[
-                { key: "category", label: "Service category" },
-                { key: "description", label: "Description" },
-                { key: "from", label: "Proposed starting price", numeric: true },
-              ]}
-              rows={ARCHITECTURE_PRICES.map((r) => ({
-                category: r.category,
-                description: r.description,
-                from: formatNaira(r.from),
               }))}
             />
           </Reveal>
