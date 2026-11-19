@@ -5,7 +5,7 @@ import { ButtonLink } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "Our services",
   description:
-    "Data, airtime, cable TV, electricity, exam pins, bulk SMS, laundry and architectural services from one BAOSWITCH wallet.",
+    "Data, airtime, cable TV, electricity, exam pins, bulk SMS, services from one BAOSWITCH wallet.",
 };
 
 /**
@@ -42,11 +42,6 @@ const CATALOGUE = [
     title: "Bulk SMS & airtime conversion",
     body: "Coming soon under BAOSWITCH services.",
     soon: true,
-  },
-  { title: "Premium laundry service", body: "BAO 360 Laundry — fast, reliable garment care." },
-  {
-    title: "Architectural designs & real estate",
-    body: "Hire an architect for floor plans, 3D visualisation and full design packages.",
   },
 ];
 

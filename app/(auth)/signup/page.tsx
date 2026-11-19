@@ -54,7 +54,7 @@ export default async function SignupPage({
           <ul className="flex flex-col gap-4 text-[clamp(1rem,0.9rem+0.3vw,1.25rem)]">
             <BrandCheck>Airtime, data &amp; household bills</BrandCheck>
             <BrandCheck>One place to track every payment</BrandCheck>
-            <BrandCheck>Laundry, architecture &amp; more</BrandCheck>
+            <BrandCheck>Airtime, data, bills &amp; more</BrandCheck>
           </ul>
         </div>
       }

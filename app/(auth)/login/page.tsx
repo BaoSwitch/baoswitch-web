@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 /** The brand panel's provider row — the same logos as the landing strip,
  *  at the frame's ~45px height. */
-const STRIP = ["GOtv", "MTN", "Glo", "9mobile", "Airtel", "BAO 360 Laundry"];
+const STRIP = ["GOtv", "MTN", "Glo", "9mobile", "Airtel", "StarTimes"];
 
 export default async function LoginPage({
   searchParams,
@@ -36,7 +36,7 @@ export default async function LoginPage({
           </h1>
           <p className="text-[clamp(1rem,0.9rem+0.3vw,1.25rem)] leading-[1.5] text-white/90">
             Top up airtime, data bundles, TV cable subscriptions, electricity bills, exam pins,
-            bulk SMS, laundry booking, hire an architect.
+            bulk SMS.
           </p>
           <ul className="mt-2 flex flex-wrap items-center gap-4">
             {strip.map((p) => (
