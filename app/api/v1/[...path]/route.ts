@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { api, clientForwardedFor } from "@/lib/server/api";
+import { api, clientForwardedFor, type Tokens } from "@/lib/server/api";
 import { sameOrigin } from "@/lib/server/http";
 import { refreshTokens } from "@/lib/server/refresh";
 import { AT, DEVICE, RT, clearSession, setSession } from "@/lib/server/session";
@@ -30,11 +30,13 @@ async function handle(req: NextRequest, ctx: { params: Promise<{ path: string[] 
 
   let access = req.cookies.get(AT)?.value;
   const refresh = req.cookies.get(RT)?.value;
-  let renewed: Awaited<ReturnType<typeof refreshTokens>> = null;
+  let renewed: Tokens | null = null;
 
   // The access cookie lapses with the token; mint a new one up front.
   if (!access && refresh) {
-    renewed = await refreshTokens(refresh, forwardedFor, req.cookies.get(DEVICE)?.value);
+    const t = await refreshTokens(refresh, forwardedFor, req.cookies.get(DEVICE)?.value);
+    if (t === "unavailable") return unavailable();
+    renewed = t;
     access = renewed?.access_token;
   }
   if (!access) return signedOut();
@@ -44,8 +46,18 @@ async function handle(req: NextRequest, ctx: { params: Promise<{ path: string[] 
 
   let r = await call(access);
   if (r.status === 401 && refresh && !renewed) {
-    renewed = await refreshTokens(refresh, forwardedFor, req.cookies.get(DEVICE)?.value);
+    const t = await refreshTokens(refresh, forwardedFor, req.cookies.get(DEVICE)?.value);
+    if (t === "unavailable") return unavailable();
+    renewed = t;
     if (renewed) r = await call(renewed.access_token);
+  }
+  // A 401 on a token we just minted is not proof the session is gone, so keep
+  // the cookies (the new pair is still set below) and let the person retry.
+  if (r.status === 401 && renewed) {
+    const res = NextResponse.json({ code: "SERVICE_TEMPORARILY_UNAVAILABLE", message: "We could not verify your session. Please try again." }, { status: 503 });
+    res.headers.set("Cache-Control", "no-store");
+    setSession(res, renewed);
+    return res;
   }
   if (r.status === 401) return signedOut();
 
@@ -55,6 +67,13 @@ async function handle(req: NextRequest, ctx: { params: Promise<{ path: string[] 
   res.headers.set("Cache-Control", "no-store");
   if (renewed) setSession(res, renewed);
   return res;
+}
+
+function unavailable() {
+  return NextResponse.json(
+    { code: "SERVICE_TEMPORARILY_UNAVAILABLE", message: "We could not reach the server. Please try again." },
+    { status: 503, headers: { "Cache-Control": "no-store" } },
+  );
 }
 
 function signedOut() {
